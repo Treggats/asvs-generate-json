@@ -22,22 +22,22 @@ class GenerateJson(object):
         self.header = sheet.row[0]
         self.rows = sheet.row[1:]
 
-        self.categories = list()
-        self.requirements = list()
-        self.levels = list()
-        self.levels.append({'en': "Oppertunistic"})
-        self.levels.append({'en': "Standard"})
-        self.levels.append({'en': "Advanced"})
+        self.categories = dict()
+        self.requirements = dict()
+        self.levels = dict()
+
+        self.levels.update({1: {'en': "Oppertunistic"}})
+        self.levels.update({2: {'en': "Standard"}})
+        self.levels.update({3: {'en': "Advanced"}})
 
         self.create_categories()
-        print(self.categories)
 
     def create_categories(self):
         for row in self.rows:
             cat = row[2].split(': ')
-            version = cat[0]
+            version = int(cat[0][1:])
             title = cat[1]
-            self.categories[version] = title
+            self.categories.update({version: title})
 
     def create_requirements(self):
         for row in self.rows:
