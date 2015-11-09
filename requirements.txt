@@ -1,0 +1,4 @@
+pyexcel==0.1.7
+pyexcel-io==0.0.8
+texttable==0.8.3
+wheel==0.24.0
