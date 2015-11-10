@@ -13,8 +13,9 @@ class GenerateJson(object):
     Convert the xls(x) to csv and this script will convert it to json
     """
 
-    def __init__(self, xls_file, _debug = False):
+    def __init__(self, xls_file, lang_code = 'en', _debug = False):
         sheet = pyexcel.get_sheet(file_name=xls_file)
+        self.lang_code = lang_code
         self._debug = _debug
         self.header = sheet.row[0]
         self.rows = sheet.row[1:]
@@ -24,9 +25,9 @@ class GenerateJson(object):
         self.requirements = dict()
         self.levels = dict()
 
-        self.levels.update({1: {'en': "Oppertunistic"}})
-        self.levels.update({2: {'en': "Standard"}})
-        self.levels.update({3: {'en': "Advanced"}})
+        self.levels.update({1: {self.lang_code: "Oppertunistic"}})
+        self.levels.update({2: {self.lang_code: "Standard"}})
+        self.levels.update({3: {self.lang_code: "Advanced"}})
 
         self.create_categories()
         self.create_requirements()
@@ -51,7 +52,7 @@ class GenerateJson(object):
             cat = row[2].split(': ')
             version = int(cat[0][1:])
             title = cat[1]
-            self.categories.update({version: {"en": title}})
+            self.categories.update({version: {self.lang_code: title}})
 
     def create_requirements(self):
         for row in self.rows:
@@ -70,13 +71,14 @@ class GenerateJson(object):
             self.requirements.update({int(row[0]): {
                 "requirement_nr": req_id,
                 "category_nr": cat_id,
-                "title": {"en": row[3]},
+                "title": {self.lang_code: row[3]},
                 "levels": levels}})
 
 
 def usage():
     print("\nUsage:")
     print("-h [--help]")
+    print("-l [--lang=] Language code, defaults to 'en'")
     print("-i= [--instance=] level, category, requirement or all")
     print("-d (debug)\n")
 
@@ -85,10 +87,11 @@ def main(argv):
     global _debug
     _debug = False
     try:
-        opts, args = getopt.getopt(argv, "hdf:i:", [
+        opts, args = getopt.getopt(argv, "hdl:f:i:", [
             "help",
             "instance=",
-            "file="])
+            "file=",
+            "lang="])
     except getopt.GetoptError as err:
         print(err)
         sys.exit(2)
@@ -97,12 +100,15 @@ def main(argv):
         sys.exit(2)
     file_name = ""
     argument = ""
+    lang_code = "en"
     for opt, arg in opts:
         if opt in ("-h", "--help"):
             usage()
             sys.exit()
         elif opt == "-d":
             _debug = True
+        elif opt in ('-l', '--lang'):
+            lang_code = arg
         elif opt in ("-f", "--file"):
             file_name = arg
         elif opt in ("-i", "--instance"):
@@ -113,8 +119,11 @@ def main(argv):
         else:
             usage()
     if len(file_name) > 0 and len(argument) > 0:
-        generator = GenerateJson(file_name, _debug)
+        generator = GenerateJson(file_name, lang_code, _debug)
         print(generator.get_json(argument))
+    else:
+        usage()
+        print("The arguments --file, --instance and --lang are mandatory")
     if _debug:
         print("Debug is set")
 
