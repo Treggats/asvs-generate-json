@@ -72,9 +72,50 @@ class GenerateJson(object):
                 "title": {"en": row[3]},
                 "levels": levels}})
 
-if __name__ == "__main__":
+
+def usage():
+    print("\nUsage:")
+    print("-h [--help]")
+    print("-i= [--instance=] level, category, requirement or all")
+    print("-d (debug)\n")
+
+
+def main(argv):
+    global _debug
+    _debug = False
     try:
-        asvs_file = "ASVS-excel.xlsx"
-        fc = GenerateJson(asvs_file)
-    except KeyError:
-        print("Boom!")
+        opts, args = getopt.getopt(argv, "hdf:i:", [
+            "help",
+            "instance=",
+            "file="])
+    except getopt.GetoptError as err:
+        print(err)
+        sys.exit(2)
+    if not opts:
+        usage()
+        sys.exit(2)
+    file_name = ""
+    argument = ""
+    for opt, arg in opts:
+        if opt in ("-h", "--help"):
+            usage()
+            sys.exit()
+        elif opt == "-d":
+            _debug = True
+        elif opt in ("-f", "--file"):
+            file_name = arg
+        elif opt in ("-i", "--instance"):
+            if arg in ('level', 'category', 'requirement', 'all'):
+                argument = arg
+            else:
+                usage()
+        else:
+            usage()
+        if len(file_name) > 0 and len(argument) > 0:
+            generator = GenerateJson(file_name)
+            print(generator.get_json(argument))
+        if _debug:
+            print("Debug is set")
+
+if __name__ == '__main__':
+    main(sys.argv[1:])
