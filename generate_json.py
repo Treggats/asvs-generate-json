@@ -45,7 +45,7 @@ class GenerateJson(object):
 
 if __name__ == "__main__":
     try:
-        asvs_file = "/home/tonko/Downloads/ASVS-excel.xlsx"
+        asvs_file = "ASVS-excel.xlsx"
         fc = GenerateJson(asvs_file)
     except KeyError:
         print("Boom!")
