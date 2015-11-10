@@ -13,8 +13,9 @@ class GenerateJson(object):
     Convert the xls(x) to csv and this script will convert it to json
     """
 
-    def __init__(self, xls_file):
+    def __init__(self, xls_file, _debug = False):
         sheet = pyexcel.get_sheet(file_name=xls_file)
+        self._debug = _debug
         self.header = sheet.row[0]
         self.rows = sheet.row[1:]
 
@@ -50,7 +51,7 @@ class GenerateJson(object):
             cat = row[2].split(': ')
             version = int(cat[0][1:])
             title = cat[1]
-            self.categories.update({version: title})
+            self.categories.update({version: {"en": title}})
 
     def create_requirements(self):
         for row in self.rows:
@@ -111,11 +112,11 @@ def main(argv):
                 usage()
         else:
             usage()
-        if len(file_name) > 0 and len(argument) > 0:
-            generator = GenerateJson(file_name)
-            print(generator.get_json(argument))
-        if _debug:
-            print("Debug is set")
+    if len(file_name) > 0 and len(argument) > 0:
+        generator = GenerateJson(file_name, _debug)
+        print(generator.get_json(argument))
+    if _debug:
+        print("Debug is set")
 
 if __name__ == '__main__':
     main(sys.argv[1:])
