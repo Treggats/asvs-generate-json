@@ -1,11 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
-import os
-from pathlib import Path
-from codecs import open
-from unicodedata import name as uni_name
-import csv
+import getopt
+import sys
 import json
 import pyexcel.ext.xls
 
