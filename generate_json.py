@@ -13,7 +13,7 @@ class GenerateJson(object):
     Convert the xls(x) to csv and this script will convert it to json
     """
 
-    def __init__(self, xls_file, lang_code = 'en', _debug = False):
+    def __init__(self, xls_file, lang_code = 'en-us', _debug = False):
         sheet = pyexcel.get_sheet(file_name=xls_file)
         self.lang_code = lang_code
         self._debug = _debug
@@ -78,7 +78,7 @@ class GenerateJson(object):
 def usage():
     print("\nUsage:")
     print("-h [--help]")
-    print("-l [--lang=] Language code, defaults to 'en'")
+    print("-l [--lang=] Language code, defaults to 'en-us'")
     print("-i= [--instance=] level, category, requirement or all")
     print("-d (debug)\n")
 
@@ -100,7 +100,7 @@ def main(argv):
         sys.exit(2)
     file_name = ""
     argument = ""
-    lang_code = "en"
+    lang_code = "en-us"
     for opt, arg in opts:
         if opt in ("-h", "--help"):
             usage()
