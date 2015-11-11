@@ -20,7 +20,7 @@ class GenerateJson(object):
         self.header = sheet.row[0]
         self.rows = sheet.row[1:]
 
-        self.fields = list()
+        self.fields = dict()
         self.categories = dict()
         self.requirements = dict()
         self.levels = dict()
@@ -32,9 +32,9 @@ class GenerateJson(object):
         self.create_categories()
         self.create_requirements()
 
-        self.fields.append(dict(level=self.levels))
-        self.fields.append(dict(category=self.categories))
-        self.fields.append(dict(requirement=self.requirements))
+        self.fields.update(level=self.levels)
+        self.fields.update(category=self.categories)
+        self.fields.update(requirement=self.requirements)
 
     def get_json(self, dictionary=''):
         if dictionary == 'level':
