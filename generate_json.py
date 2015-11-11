@@ -123,7 +123,7 @@ def main(argv):
         print(generator.get_json(argument))
     else:
         usage()
-        print("The arguments --file, --instance and --lang are mandatory")
+        print("The arguments --file and --instance are mandatory")
     if _debug:
         print("Debug is set")
 
